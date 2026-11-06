@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Ever, Teddy: The Plan</title>
+<style>:root{ --bg:#f7f3ec; --panel:#fffdf8; --ink:#2d2a26; --muted:#6f6a61; --line:#e3dccf; --green:#33473a; --green-soft:#e8ede6; --gold:#b9906a; --rose:#8a4f5c; }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--bg); color:var(--ink); font-family:"Segoe UI", system-ui, -apple-system, sans-serif; line-height:1.65; }
+h1,h2,h3{ font-family:Georgia, "Times New Roman", serif; font-weight:600; line-height:1.15; }
+.eyebrow{ text-transform:uppercase; letter-spacing:.14em; font-size:12px; font-weight:700; color:var(--gold); }
+.gate{ min-height:100svh; display:grid; place-items:center; padding:20px; }
+.gate-card{ background:var(--panel); border:1px solid var(--line); border-radius:22px; padding:36px; max-width:520px; width:100%; box-shadow:0 18px 40px rgba(45,42,38,.08); }
+.gate-card h1{ font-size:44px; margin:10px 0; }
+.gate-card p{ color:var(--muted); }
+.gate-card label{ display:block; font-weight:700; font-size:13px; margin-top:18px; }
+.gate-row{ display:flex; gap:8px; margin-top:7px; }
+.gate-row input{ flex:1; min-width:0; border:1px solid var(--line); border-radius:10px; padding:11px 12px; font:inherit; background:#fff; }
+.gate-row button{ border:1px solid var(--green); background:var(--green); color:#fff; border-radius:10px; padding:11px 16px; font:inherit; font-weight:700; cursor:pointer; white-space:nowrap; }
+.error{ color:#9b2c3d !important; font-weight:600; }
+.gate-note{ font-size:13px; }
+.content{ max-width:920px; margin:0 auto; padding:28px 20px 56px; }
+.content section{ background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:28px; margin-bottom:18px; }
+.content section.hero{ background:var(--green); color:#f5f1e8; border-color:var(--green); padding:40px 32px; }
+.content .hero .eyebrow{ color:#d8c9a8; }
+.content .hero h1{ font-size:clamp(44px, 8vw, 72px); margin:8px 0; font-weight:500; }
+.lede{ font-size:19px; color:#e7e0d1; max-width:56ch; }
+.facts{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:24px; }
+.facts div{ background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.16); border-radius:14px; padding:14px; }
+.facts strong{ display:block; font-family:Georgia, serif; font-size:21px; }
+.facts span{ color:#cfd8cd; font-size:13px; }
+.content h2{ font-size:27px; margin:0 0 12px; }
+.content p{ color:#454139; }
+.content section.hero p{ color:#e7e0d1; }
+.cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:14px; }
+.cards article{ border:1px solid var(--line); border-radius:14px; padding:17px; background:#fff; }
+.cards h3{ font-size:21px; margin:5px 0 2px; }
+.order{ font-size:12px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); font-weight:700; }
+.role{ color:var(--rose) !important; font-weight:700; margin:0 0 8px; }
+.cards p{ font-size:14.5px; }
+.timeline, .steps{ list-style:none; padding:0; margin:12px 0 0; display:grid; gap:10px; }
+.timeline li{ display:grid; grid-template-columns:130px 1fr; gap:14px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:13px 15px; }
+.timeline li span{ font-weight:700; color:var(--green); font-size:13.5px; padding-top:2px; }
+.steps{ counter-reset:step; }
+.steps li{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:13px 15px; }
+.questions li, .content ul li{ margin-bottom:7px; }
+.closing{ background:#f4efe4 !important; }
+.credit{ font-family:Georgia, serif; font-size:16.5px; }
+@media (max-width:680px){ .facts, .cards{ grid-template-columns:1fr; } .timeline li{ grid-template-columns:1fr; gap:3px; } .gate-row{ flex-direction:column; } .content section{ padding:22px; } }
+</style>
+</head>
+<body>
+<main id="gate" class="gate">
+  <div class="gate-card">
+    <p class="eyebrow">Private family page</p>
+    <h1>Ever, Teddy</h1>
+    <p>This page holds the plan for a short memorial film for Teddy Sodeman. Enter the password you were given to read it.</p>
+    <form id="gate-form">
+      <label for="pw">Password</label>
+      <div class="gate-row">
+        <input id="pw" type="password" autocomplete="current-password" required />
+        <button type="submit">Open the plan</button>
+      </div>
+      <p id="gate-error" class="error" role="alert" hidden>That password did not work. Check it and try again.</p>
+    </form>
+    <p class="gate-note">Please do not forward the password. Savannah decides how the finished film is shared.</p>
+  </div>
+</main>
+<main id="content" class="content" hidden></main>
+<script>
+const PAYLOAD = {"salt":"PurjI4ZiOaaNnJV2aIJmpQ==","iv":"xn6mimShaE2BDbnO","data":"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"};
+const fromB64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+async function unlock(password) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt: fromB64(PAYLOAD.salt), iterations: 210000, hash: 'SHA-256' },
+    keyMaterial, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fromB64(PAYLOAD.iv) }, key, fromB64(PAYLOAD.data));
+  document.getElementById('content').innerHTML = new TextDecoder().decode(plain);
+  document.getElementById('gate').hidden = true;
+  document.getElementById('content').hidden = false;
+  document.title = 'Ever, Teddy: The Plan';
+}
+document.getElementById('gate-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const password = document.getElementById('pw').value;
+  const error = document.getElementById('gate-error');
+  try {
+    await unlock(password);
+    sessionStorage.setItem('ever-teddy-share', password);
+  } catch {
+    error.hidden = false;
+  }
+});
+const saved = sessionStorage.getItem('ever-teddy-share');
+if (saved) { unlock(saved).catch(() => sessionStorage.removeItem('ever-teddy-share')); }
+</script>
+</body>
+</html>
